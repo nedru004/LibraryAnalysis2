@@ -1,0 +1,13 @@
+#Summary
+#Generated on	Tue Dec 14 11:33:41 CST 2021
+#Version	5
+chroms	1
+bases	16861
+defined	861
+undefined	16000
+contigs	1
+scaffolds	1
+interpad	300
+source	C:\Users\david.nedrud\Documents\GitHub\LibraryAnalysis2\test\Amp.fa
+bytes	867
+last modified	1639501229598
