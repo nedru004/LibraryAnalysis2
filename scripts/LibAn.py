@@ -8,7 +8,7 @@ import Bio.Seq
 import Bio.SeqIO
 import Bio.SeqRecord
 
-def run(wt_file, seq_file1, seq_file2, run_variant):
+def run(wt_file, seq_file1, seq_file2, run_variant, run_correlation):
     # Sanity checks
     #app.run.config(bg='green', activebackground='green', relief=tk.SUNKEN, state='disabled')
     #assert os.path.isfile(f'{args.bowtie}bowtie2'), f"Can't find bowtie2 at {args.bowtie}"
