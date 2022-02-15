@@ -14,8 +14,8 @@ def run(wt_file, seq_file1, seq_file2):
     #assert os.path.isfile(f'{args.bowtie}bowtie2'), f"Can't find bowtie2 at {args.bowtie}"
     #assert os.path.isfile(f'{args.bowtie}bowtie2-build'), f"Can't find bowtie2-build at {args.bowtie}"
     assert os.path.isfile(seq_file1), f"given sequencing file, '{seq_file1}', does not exist"
-    assert Bio.SeqIO.read(wt_seq, 'fasta').seq.translate(), f"given refrence/wildtype sequence file " \
-                                                                f"'{wt_seq}' is not a valid FASTA file " \
+    assert Bio.SeqIO.read(wt_file, 'fasta').seq.translate(), f"given refrence/wildtype sequence file " \
+                                                                f"'{wt_file}' is not a valid FASTA file " \
                                                                 f"containing one unambiguous DNA sequence!"
 
     # variables from arguments
