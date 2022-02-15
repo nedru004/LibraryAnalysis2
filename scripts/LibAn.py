@@ -49,7 +49,7 @@ def run(wt_seq, seq_file1, seq_file2):
         message = f'Aligning all sequences from {sequencing_file} to {wt_seq} using bbmap.'
         print(message)
         print('Aligning sequencing reads to reference.\n')
-        AlignmentAnalyze.align_all_bbmap(sequencing_file, wt_seq, f'{rootname}.sam', max_gap=len(wt_seq), paired_sequencing_file=paired_sequencing_file)
+        AlignmentAnalyze.align_all_bbmap(sequencing_file, str(wt_seq), f'{rootname}.sam', max_gap=len(wt_seq), paired_sequencing_file=paired_sequencing_file)
 
     # determine the number of reads
     lines = sum(1 for i in open(f'{rootname}.sam', 'rb'))
