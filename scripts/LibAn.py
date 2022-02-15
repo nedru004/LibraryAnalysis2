@@ -39,7 +39,6 @@ def run(wt_seq, seq_file1, seq_file2):
         if not quiet:
             print(message)
         print('Merging paired reads.\n')
-        root.update()
         sequencing_file, paired_sequencing_file = AlignmentAnalyze.correct_pairs(sequencing_file, paired_sequencing_file)
         # mergedfile = f"{rootname}_merged.{seqreadtype}"
         # AlignmentAnalyze.merge_pairs(sequencing_file, paired_sequencing_file, mergedfile)
@@ -50,7 +49,6 @@ def run(wt_seq, seq_file1, seq_file2):
         message = f'Aligning all sequences from {sequencing_file} to {wt_seq} using bbmap.'
         print(message)
         print('Aligning sequencing reads to reference.\n')
-        root.update()
         AlignmentAnalyze.align_all_bbmap(sequencing_file, wt_seq, f'{rootname}.sam', max_gap=len(wt_seq), paired_sequencing_file=paired_sequencing_file)
 
     # determine the number of reads
@@ -58,15 +56,12 @@ def run(wt_seq, seq_file1, seq_file2):
     reads = int((lines-3) / 2)
     print('Total number of reads to analyze: '+str(reads))
     print(f'Total number of reads to analyze: {str(reads)}\n')
-    root.update()
 
     # call variants / find mutations
     print(f'Calling mutations/variants\n')
-    root.update()
     # David's work
     AlignmentAnalyze.david_call_variants(f"{rootname}.sam", wt_seq, rootname, app, root)
     print(f'Finding paired mutations\n')
-    root.update()
     if run_correlation:
         AlignmentAnalyze.david_paired_analysis(rootname + '.csv', rootname + '_wt.csv', app, root)
     # os.system(f'java -cp ../bbmap/current/ var2.CallVariants2 in={rootname}.sam ref={app.wt_file} ploidy=1 out={rootname}.vcf 32bit')
@@ -76,4 +71,3 @@ def run(wt_seq, seq_file1, seq_file2):
     print(f'Analyzed {reads} in {round(seq_analyze_time, 1)} seconds. {time_per_seq} ms per read.')
     print(f'Analyzed {reads} in {round(seq_analyze_time, 1)} seconds. {time_per_seq} ms per read.')
     print('Finished Analysis')
-    root.update()
