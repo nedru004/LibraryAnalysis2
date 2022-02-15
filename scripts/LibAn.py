@@ -8,18 +8,18 @@ import Bio.Seq
 import Bio.SeqIO
 import Bio.SeqRecord
 
-def run():
+def run(wt_seq, seq_file1, seq_file2):
     # Sanity checks
     #app.run.config(bg='green', activebackground='green', relief=tk.SUNKEN, state='disabled')
     #assert os.path.isfile(f'{args.bowtie}bowtie2'), f"Can't find bowtie2 at {args.bowtie}"
     #assert os.path.isfile(f'{args.bowtie}bowtie2-build'), f"Can't find bowtie2-build at {args.bowtie}"
-    assert os.path.isfile(seq_file), f"given sequencing file, '{seq_file}', does not exist"
-    assert Bio.Seq(wt_seq).seq.translate(), f"given refrence/wildtype sequence file " \
+    assert os.path.isfile(seq_file1), f"given sequencing file, '{seq_file1}', does not exist"
+    assert Bio.SeqIO(wt_seq).seq.translate(), f"given refrence/wildtype sequence file " \
                                                                 f"'{wt_seq}' is not a valid FASTA file " \
                                                                 f"containing one unambiguous DNA sequence!"
 
     # variables from arguments
-    wt_seq = Bio.Seq(wt_seq)
+    wt_seq = Bio.SeqIO(wt_seq)
     sequencing_file = seq_file1
     paired_sequencing_file = seq_file2
     quiet = 0
