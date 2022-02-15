@@ -55,7 +55,7 @@ def correct_pairs(in1, in2, bbmerge_location=r'java -cp ../bbmap/current/ jgi.BB
     return out1, out2
 
 
-def david_call_variants(sam_file, wt, outfile, app, root):
+def david_call_variants(sam_file, wt, outfile, variant_check):
     quality = 25
     quality_nt = 30
     # Analyze Codons
@@ -65,9 +65,8 @@ def david_call_variants(sam_file, wt, outfile, app, root):
     wt_count = [0]*int(len(wt)/3)
     file = open(outfile + '.csv', 'w')
     wt_file = open(outfile +'_wt.csv', 'w')
-    variant_check = app.variant_check.get()
     read_count = 0
-    percentage_reads = list(range(0, app.reads, int(app.reads/99)+(app.reads % 99 > 0)))
+    #percentage_reads = list(range(0, app.reads, int(app.reads/99)+(app.reads % 99 > 0)))
     while True:  # loop through each read from ngs
         try:
             tmp_r1 = next(loop_read).split('\t')
@@ -176,10 +175,10 @@ def david_call_variants(sam_file, wt, outfile, app, root):
                 wt_count[wt_idx] += 1  # only add to total count after both reads have been processed
             wt_file.write(','.join(str(x) for x in wt_positions) + '\n')
         read_count += 1
-        if read_count in percentage_reads:
-            root.update_idletasks()
-            app.progress['value'] += 1
-            root.update()
+        # if read_count in percentage_reads:
+        #     root.update_idletasks()
+        #     app.progress['value'] += 1
+        #     root.update()
     # Add wt to mutation_dict
     for i, wt_c in enumerate(wt_count[1:]):
         mutation_dict[str(i+1)+'_'+str(wt.seq[i*3:i*3+3])] = wt_c
@@ -205,11 +204,8 @@ def david_call_variants(sam_file, wt, outfile, app, root):
     #return mutation_table, correlation_matrix, correlation_matrix_wt
 
 
-def david_paired_analysis(mut_files, wt_files, app, root):
-    percentage_reads = list(range(0, app.reads, int(app.reads/99)))
-    root.update_idletasks()
-    app.progress['value'] = 0
-    root.update()
+def david_paired_analysis(mut_files, wt_files):
+    #percentage_reads = list(range(0, app.reads, int(app.reads/99)))
     outfile = os.path.splitext(mut_files)[0]
     mutation_file = open(mut_files, 'r')
     ## Mutation Pairs ##
@@ -237,10 +233,10 @@ def david_paired_analysis(mut_files, wt_files, app, root):
             except KeyError:
                 correlations_wt[','.join(wt_pos)] = 1
         read_count += 1
-        if read_count in percentage_reads:
-            root.update_idletasks()
-            app.progress['value'] += 1
-            root.update()
+        # if read_count in percentage_reads:
+        #     root.update_idletasks()
+        #     app.progress['value'] += 1
+        #     root.update()
     wt_matrix = pd.DataFrame({'pair': list(correlations_wt.keys()), 'count': list(correlations_wt.values())})
     wt_matrix[['pos1', 'pos2']] = wt_matrix['pair'].str.split(',', expand=True)
     wt_matrix['pos1'] = pd.to_numeric(wt_matrix['pos1'])

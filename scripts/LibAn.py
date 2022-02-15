@@ -8,7 +8,7 @@ import Bio.Seq
 import Bio.SeqIO
 import Bio.SeqRecord
 
-def run(wt_file, seq_file1, seq_file2):
+def run(wt_file, seq_file1, seq_file2, run_variant):
     # Sanity checks
     #app.run.config(bg='green', activebackground='green', relief=tk.SUNKEN, state='disabled')
     #assert os.path.isfile(f'{args.bowtie}bowtie2'), f"Can't find bowtie2 at {args.bowtie}"
@@ -35,10 +35,7 @@ def run(wt_file, seq_file1, seq_file2):
 
     # merge paired reads
     if paired_sequencing_file and not os.path.exists(rootname.split('.fastq')[0]+'_corrected.fastq.gz'):
-        message = f'Merging paired reads from {sequencing_file} and {paired_sequencing_file} using bbmerge.'
-        if not quiet:
-            print(message)
-        print('Merging paired reads.\n')
+        print(f'Merging paired reads from {sequencing_file} and {paired_sequencing_file} using bbmerge.')
         sequencing_file, paired_sequencing_file = AlignmentAnalyze.correct_pairs(sequencing_file, paired_sequencing_file)
         # mergedfile = f"{rootname}_merged.{seqreadtype}"
         # AlignmentAnalyze.merge_pairs(sequencing_file, paired_sequencing_file, mergedfile)
@@ -46,9 +43,7 @@ def run(wt_file, seq_file1, seq_file2):
 
     # align reads (using bbmap)
     if not os.path.exists(f'{rootname}.sam'):  # and app.aamuts_file:
-        message = f'Aligning all sequences from {sequencing_file} to {wt_file} using bbmap.'
-        print(message)
-        print('Aligning sequencing reads to reference.\n')
+        print(f'Aligning all sequences from {sequencing_file} to {wt_file} using bbmap.')
         AlignmentAnalyze.align_all_bbmap(sequencing_file, wt_file, f'{rootname}.sam', max_gap=len(wt_seq), paired_sequencing_file=paired_sequencing_file)
 
     # determine the number of reads
@@ -60,10 +55,10 @@ def run(wt_file, seq_file1, seq_file2):
     # call variants / find mutations
     print(f'Calling mutations/variants\n')
     # David's work
-    AlignmentAnalyze.david_call_variants(f"{rootname}.sam", wt_seq, rootname, app, root)
+    AlignmentAnalyze.david_call_variants(f"{rootname}.sam", wt_seq, rootname, run_variant)
     print(f'Finding paired mutations\n')
     if run_correlation:
-        AlignmentAnalyze.david_paired_analysis(rootname + '.csv', rootname + '_wt.csv', app, root)
+        AlignmentAnalyze.david_paired_analysis(rootname + '.csv', rootname + '_wt.csv')
     # os.system(f'java -cp ../bbmap/current/ var2.CallVariants2 in={rootname}.sam ref={app.wt_file} ploidy=1 out={rootname}.vcf 32bit')
 
     seq_analyze_time = time.time() - programstart
