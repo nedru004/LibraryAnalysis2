@@ -8,7 +8,7 @@ import Bio.Seq
 import Bio.SeqIO
 import Bio.SeqRecord
 
-def run(wt_seq, seq_file1, seq_file2):
+def run(wt_file, seq_file1, seq_file2):
     # Sanity checks
     #app.run.config(bg='green', activebackground='green', relief=tk.SUNKEN, state='disabled')
     #assert os.path.isfile(f'{args.bowtie}bowtie2'), f"Can't find bowtie2 at {args.bowtie}"
@@ -19,7 +19,7 @@ def run(wt_seq, seq_file1, seq_file2):
                                                                 f"containing one unambiguous DNA sequence!"
 
     # variables from arguments
-    wt_seq = Bio.SeqIO.read(wt_seq, 'fasta')
+    wt_seq = Bio.SeqIO.read(wt_file, 'fasta')
     sequencing_file = seq_file1
     paired_sequencing_file = seq_file2
     quiet = 0
@@ -46,10 +46,10 @@ def run(wt_seq, seq_file1, seq_file2):
 
     # align reads (using bbmap)
     if not os.path.exists(f'{rootname}.sam'):  # and app.aamuts_file:
-        message = f'Aligning all sequences from {sequencing_file} to {wt_seq} using bbmap.'
+        message = f'Aligning all sequences from {sequencing_file} to {wt_file} using bbmap.'
         print(message)
         print('Aligning sequencing reads to reference.\n')
-        AlignmentAnalyze.align_all_bbmap(sequencing_file, str(wt_seq), f'{rootname}.sam', max_gap=len(wt_seq), paired_sequencing_file=paired_sequencing_file)
+        AlignmentAnalyze.align_all_bbmap(sequencing_file, wt_file, f'{rootname}.sam', max_gap=len(wt_seq), paired_sequencing_file=paired_sequencing_file)
 
     # determine the number of reads
     lines = sum(1 for i in open(f'{rootname}.sam', 'rb'))
